@@ -1,19 +1,18 @@
-import { Client, GatewayIntentBits } from 'npm:discord.js';
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-import { config } from "https://deno.land/x/dotenv/mod.ts";
+import { createBot, Intents, startBot } from "https://deno.land/x/discordeno@13.0.0/mod.ts";
 
-const ENV = config();
-
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+const bot = createBot({
+  token: Deno.env.get("TOKEN"),
+  intents: Intents.Guilds | Intents.GuildMessages,
+  events: {
+    ready() {
+      console.log("Successfully connected to gateway");
+    },
+  },
 });
 
-client.on('interactionCreate', async interaction => {
-  if (!interaction.isChatInputCommand()) return;
+// Another way to do events
+bot.events.messageCreate = function (b, message) {
+  // Process the message here with your command handler.
+};
 
-  if (interaction.commandName === 'ping') {
-    await interaction.reply('Pong!');
-  }
-});
-
-client.login(ENV.TOKEN);
+await startBot(bot);
