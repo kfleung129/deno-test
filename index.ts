@@ -1,10 +1,7 @@
 import { createBot, Intents, startBot } from "https://deno.land/x/discordeno@13.0.0/mod.ts";
-import { config } from "https://deno.land/x/dotenv/mod.ts";
-
-const ENV = config();
 
 const bot = createBot({
-  token: ENV.TOKEN,
+  token: Deno.env.get("TOKEN"),
   intents: Intents.Guilds | Intents.GuildMessages,
   events: {
     ready() {
